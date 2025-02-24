@@ -7,14 +7,16 @@ import { sendEmailService } from "../../services/sendEmailService.js";
 //MARK: signup
 export const signup = async (req, res) => {
   const { email, username, password, confirmPassword, role } = req.body;
+  console.log(email, username, password, confirmPassword, role);
+
   if (password !== confirmPassword) {
-    return res.status(400).json({ message: "Password not match" });
+    return next(new Error("Password does not match", { cause: 400 }));
   }
   if (await userModel.findOne({ email })) {
-    return res.status(400).json({ message: "Email already exist" });
+    return next(new Error("Email already exist", { cause: 400 }));
   }
   if (await userModel.findOne({ username })) {
-    return res.status(400).json({ message: "Username already exist" });
+    return next(new Error("Username already exist", { cause: 400 }));
   }
   const hashedPassword = hashSync(password, 10);
 
@@ -30,12 +32,11 @@ export const signup = async (req, res) => {
     signature: process.env.EMAIL_CONFIRMATION_SIGNATURE,
     expiresIn: "1h",
   });
-  const confirmationLink = `http://localhost:3000/api/user/confirm/${confirmationToken}`;
   const isEmailsent = await sendEmailService({
     to: email,
     subject: "Email Confirmation",
     message: emailTemplate({
-      link: confirmationLink,
+      link: "http://localhost:5173/confirmation?token=" + confirmationToken,
       linkData:
         "Please click the button below to confirm your email and finish setting up your account. This link will expire in 1 hour.",
       subject: "Email Confirmation",
@@ -47,43 +48,54 @@ export const signup = async (req, res) => {
 };
 
 //MARK: confirm email
-export const confirmEmail = async (req, res) => {
+export const confirmEmail = async (req, res, next) => {
   const { token } = req.params;
   const { email, username, role } = verifyToken({
     token,
     signature: process.env.EMAIL_CONFIRMATION_SIGNATURE,
   });
   if (!email) {
-    return res.status(400).json({ message: "Invalid token" });
+    return next(new Error("Invalid token", { cause: 400 }));
   }
   const user = await userModel.findOne({ email });
+
   if (!user) {
-    return res.status(400).json({ message: "User not found" });
+    return next(new Error("User not found", { cause: 400 }));
   }
+  if (user.isConfirmed) {
+    return next(new Error("Email already confirmed", { cause: 400 }));
+  }
+  const userToken = generateToken({
+    payload: { email, username, role },
+    signature: process.env.SIGNIN_SIGNATURE,
+    expiresIn: "1h",
+  });
+  user.token = userToken;
   user.isConfirmed = true;
+  console.log(user);
   await user.save();
   return res.status(200).json({ message: "Email confirmed", user });
 };
 
 //MARK: login
-export const login = async (req, res) => {
+export const login = async (req, res, next) => {
   const { email, password } = req.body;
-  const user = await userModel.findOne({
-    email,
-  });
+  const user = await userModel.findOne({ email });
   if (!user) {
-    return res.status(400).json({ message: "Invalid email" });
+    return next(new Error("Invalid email", { cause: 400 }));
   }
   if (!user.isConfirmed) {
-    return res.status(400).json({ message: "Email not confirmed" });
+    return next(new Error("Email not confirmed", { cause: 400 }));
   }
   if (!compareSync(password, user.password)) {
-    return res.status(400).json({ message: "Invalid password" });
+    return next(new Error("Invalid password", { cause: 400 }));
   }
   const token = generateToken({
     payload: { email, username: user.username, role: user.role },
+    signature: process.env.SIGNIN_SIGNATURE,
+    expiresIn: "1h",
   });
   user.token = token;
   await user.save();
-  return res.status(200).json({ token });
+  return res.status(200).json({ user });
 };
