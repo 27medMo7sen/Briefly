@@ -3,12 +3,14 @@
   /* Custom Colors */
   --color-custom-blue: #e0f7ff;
   --color-custom-pink: #ffd1e8;
-
+  --color-dark-blue: #071926
   /* Text Shadows */
   --text-shadow-sidebar-header-shadow: 0 0 10px rgba(164, 249, 255, 0.8),
     0 0 15px rgba(255, 255, 255, 0.5), 0 0 20px rgb(119, 26, 143);
 
   /* Background Images */
+  --bg-gradient: linear-gradient(
+    45deg,#040F17,#071926);
   --bg-image-sidebar-gradient: linear-gradient(
     270deg,
     #6414a4,
@@ -174,7 +176,19 @@
       opacity: 1;
     }
   }
+  @keyframes move-background{
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
   /* animates */
+  --animate-move-background: move-background 120s ease-in-out infinite;
   --animate-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   --animate-sidebar-gradient: sidebar-gradient-animate 4s ease infinite;
   --animate-sidebar-gradient: sidebar-gradient-animate 4s ease infinite;
@@ -204,8 +218,7 @@
 }
 
 body {
-  background-color: var(--base);
-  transition: background-color 0.3s;
+  background: var(--base);
 }
 :root {
   --base: #f8fbfc;
@@ -216,7 +229,8 @@ body {
   --shadow-color: #0000001a;
 }
 body[dark-theme="dark"] {
-  --base: #02090d !important;
+  --base: linear-gradient(
+    270deg,#071926,#040F17);
   --primary: #0f96f0;
   --shadow-color: #ffffff1a;
   --primary-light: #0f96f04d;
