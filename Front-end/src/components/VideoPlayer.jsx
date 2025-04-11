@@ -23,7 +23,7 @@ function VideoPlayer({ options, themeName = "fantasy" }) {
     <div data-vjs-player>
       <video
         ref={videoRef}
-        className={`video-js vjs-big-play-centered vjs-theme-${themeName} min-w-[700px]`}
+        className={`video-js vjs-big-play-centered vjs-theme-${themeName} min-w-[700px] min-h-[400px]`}
       />
     </div>
   );

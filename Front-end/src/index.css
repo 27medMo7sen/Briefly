@@ -174,8 +174,32 @@
       opacity: 1;
     }
   }
+  @keyframes slide-left {
+    0% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  @keyframes floating {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(20px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
+    
+  }
   /* animates */
+  --animate-floating: floating 3s ease infinite;
   --animate-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-slide-left: slide-left 0.5s ease-in-out;
   --animate-sidebar-gradient: sidebar-gradient-animate 4s ease infinite;
   --animate-sidebar-gradient: sidebar-gradient-animate 4s ease infinite;
   --animate-skeleton-loading: skeleton-loading 1s ease infinite alternate;

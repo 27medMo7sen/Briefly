@@ -10,7 +10,7 @@ import { uiActions } from "../../store/uiSlice";
 import { FaShare } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
 import { MdDownload } from "react-icons/md";
-
+import SustainableDevelopmentSummary from "../components/library/TextSummary";
 function Library() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -42,10 +42,9 @@ function Library() {
       {isShowingSummary && (
         <Modal onClose={closeModal}>
           <VideoPlayer options={videoJsOptions} />
-          <div className="flex gap-4 justify-between">
-            <div className="flex flex-col  ">
-              <h1 className="text-3xl font-bold">{selectedItem.title}</h1>
-              <p className="w-[350px] overflow-hidden font-semibold">{selectedItem.description}</p>
+          <div className="flex  gap-4 justify-between border-b-2 pb-4">
+            <div className="text-3xl w-[400px] inline font-bold">
+              The 2030 Agenda for Sustainable Development
             </div>
             <div className="flex gap-2 justify-center items-center">
               <button className="flex h-[fit-content] items-center gap-2 bg-[var(--primary-dark)] text-white/90 p-2 rounded-lg cursor-pointer hover:bg-[var(--primary-dark)]/90">
@@ -62,6 +61,7 @@ function Library() {
               </button>
             </div>
           </div>
+            <SustainableDevelopmentSummary />
         </Modal>
       )}
       <div className="col-span-3">

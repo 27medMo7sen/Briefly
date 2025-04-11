@@ -7,8 +7,8 @@ import { Modal } from "../UI/Modal";
 import { useSelector, useDispatch } from "react-redux";
 import { uiActions } from "../../store/uiSlice";
 import SummarizingCard from "../components/Home/SummarizingCard";
+import SideComponent from "../components/Home/SideComponent";
 function Home() {
-
   const isSummaryModalOpen = useSelector(
     (state) => state.ui.isSummaryModalOpen
   );
@@ -29,8 +29,15 @@ function Home() {
         </Modal>
       )}
       {/* <VideoPlayer options={videoJsOptions} /> */}
-      <MainCard />
-      <MiniForm />
+      <div className="grid grid-cols-2">
+        <div className="col-span-1">
+          <MainCard />
+          <MiniForm />
+        </div>
+        <div className="col-span-1">
+          <SideComponent />
+        </div>
+      </div>
     </Fragment>
   );
 }
