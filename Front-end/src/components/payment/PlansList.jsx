@@ -55,7 +55,7 @@ function PlansList() {
             <h1 className="text-center text-2xl font-bold  border-b-2 border-[var(--primary-dark)]/40 w-full">
               Pro plan
             </h1>
-            <p className="tex-center tex-xl font-bold">$19/month</p>
+            <p className="tex-center tex-xl font-bold">$15/month</p>
           </div>
           <ul className="flex flex-col gap-3 font-semibold text-lg ">
             <div className="flex gap-2  items-center">
@@ -90,7 +90,7 @@ function PlansList() {
             <h1 className="text-center text-2xl font-bold  border-b-2 border-[var(--primary-dark)]/40 w-full">
               Premium Plan
             </h1>
-            <p className="tex-center tex-xl font-bold">$29/month</p>
+            <p className="tex-center tex-xl font-bold">$30/month</p>
           </div>
           <ul className="flex flex-col gap-3 font-semibold text-lg ">
             <div className="flex gap-2  items-center">

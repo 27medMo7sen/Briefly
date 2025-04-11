@@ -1,19 +1,16 @@
 import React from "react";
 import MainAuth from "../components/auth/MainAuth";
-import sideImage from "../../assets/sideImage.png";
+import darkSide from "../../assets/darkSideImage.png";
+import lightSide from "../../assets/lightSideImage.png";
+import { useSelector } from "react-redux";
 function Auth() {
+  const isDarkMode = useSelector((state) => state.ui.isDarkMode);
   return (
-    <div className="grid grid-cols-2 bg-[var(--base)]">
-      <div className="col-span-1   h-screen">
+    <div className=" bg-[var(--base)]">
+      <div className=" h-screen">
         <MainAuth />
       </div>
-      <div className="col-span-1 hidden md:block">
-        <img
-          src={sideImage}
-          alt="auth"
-          className="h-screen w-full object-cover rounded-l-2xl"
-        />
-      </div>
+     
     </div>
   );
 }

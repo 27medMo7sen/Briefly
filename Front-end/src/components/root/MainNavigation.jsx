@@ -34,7 +34,7 @@ function MainNavigation() {
           Home
         </NavLink>
         <NavLink
-          to="/library"
+          to={`${token ? "/library" : "/auth?mode=signin"}`}
           className={({ isActive }) =>
             isActive ? activeClasses : inActiveClasses
           }
@@ -73,7 +73,6 @@ function MainNavigation() {
             <p className="text-lg text-[var(--primary-font-color)]">
               {username}
             </p>
-            
           </div>
         )}
       </div>

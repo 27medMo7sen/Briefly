@@ -1,4 +1,4 @@
-import React from "react";
+import {useState, useEffect} from "react";
 import { MdAlternateEmail } from "react-icons/md";
 import { LuLockKeyhole } from "react-icons/lu";
 import { TbEyeOff } from "react-icons/tb";
@@ -11,7 +11,7 @@ import { authActions } from "../../../../store/authSlice";
 import { useNavigate } from "react-router-dom";
 function SigninForm() {
   const dispatch = useDispatch();
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const {
     enteredValue: email,

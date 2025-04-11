@@ -18,16 +18,18 @@ function LibraryItem({ item }) {
         dispatch(libraryActions.setSelectedItem(item));
       }}
     >
-      <img
-        src={item.image}
-        alt={item.title}
-        className="w-[185px] h-[185px] rounded-2xl"
-      />
+      <img src={item.image} className="w-[185px] h-[185px] rounded-2xl" />
       <div className="flex flex-col justify-between p-5 w-full">
         <div>
-          <h2 className="text-3xl font-bold">{item.title}</h2>
+          <h2 className="text-3xl font-bold">
+            The 2030 Agenda for Sustainable Development
+          </h2>
           <p className="text-lg text-[var(--primary-font-color)]/80">
-            {item.description}
+            The 2030 Agenda, adopted by UN member states in 2015, outlines 17
+            Sustainable Development Goals (SDGs) applicable to all countries.
+            These goals address issues like poverty, education, and climate
+            change, emphasizing a universal approach that respects social,
+            economic, and environmental dimensions. Collaboration
           </p>
         </div>
         <span className="text-[var(--primary-font-color)] text-sm">
