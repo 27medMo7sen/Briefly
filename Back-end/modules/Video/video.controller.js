@@ -10,9 +10,10 @@ export const uploadVideo = async (req, res, next) => {
     const video = new Video({
       title: req.body.title || req.file.originalname,
       description: req.body.description,
-      filePath: req.file.path,
+      filePath: `../storage/${req.user._id}`,
+      customId: req.file.filename,
       owner: req.user._id,
-      status: 'completed' // Set status to completed since we're not processing
+      status: "completed",
     });
 
     await video.save();
@@ -24,7 +25,7 @@ export const uploadVideo = async (req, res, next) => {
         id: video._id,
         title: video.title,
         status: video.status,
-        filePath: video.filePath
+        filePath: video.filePath,
       },
     });
   } catch (error) {

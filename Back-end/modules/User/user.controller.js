@@ -30,7 +30,7 @@ export const signup = async (req, res) => {
 
   await user.save();
   const confirmationToken = generateToken({
-    payload: { email, username, role },
+    payload: { _id: user._id, email, username, role },
     signature: process.env.EMAIL_CONFIRMATION_SIGNATURE,
     expiresIn: "1h",
   });
@@ -129,4 +129,29 @@ export const login = async (req, res, next) => {
   user.token = token;
   await user.save();
   return res.status(200).json({ user });
+};
+
+//MARK: refresh token
+export const refreshToken = async (req, res, next) => {
+  const { token } = req.body;
+  if (!token) {
+    return next(new Error({ message: "Token not found", cause: 400 }));
+  }
+  const user = await userModel.findOne({ token });
+  if (!user) {
+    return next(new Error({ message: "Invalid token", cause: 400 }));
+  }
+  const newToken = generateToken({
+    payload: {
+      _id: user._id,
+      email: user.email,
+      username: user.username,
+      role: user.role,
+    },
+    signature: process.env.SIGNIN_SIGNATURE,
+    expiresIn: "1h",
+  });
+  user.token = newToken;
+  await user.save();
+  return res.status(200).json({ token: newToken });
 };
