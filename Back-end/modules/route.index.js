@@ -1,3 +1,7 @@
-import userRouter from './User/user.routes.js';
+import userRoutes from "./User/user.routes.js";
+import videoRoutes from "./Video/video.routes.js";
 
-export { userRouter };
+export const setupRoutes = (app) => {
+  app.use("/api/users", userRoutes);
+  app.use("/api/videos", videoRoutes);
+};

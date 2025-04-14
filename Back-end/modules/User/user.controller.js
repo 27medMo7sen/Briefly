@@ -122,7 +122,7 @@ export const login = async (req, res, next) => {
     return next(new Error({ message: "Invalid password", cause: 400 }));
   }
   const token = generateToken({
-    payload: { email, username: user.username, role: user.role },
+    payload: { _id: user._id, email, username: user.username, role: user.role },
     signature: process.env.SIGNIN_SIGNATURE,
     expiresIn: "1h",
   });
