@@ -13,6 +13,7 @@ import Payment from "./pages/Payment";
 import Library from "./pages/Library";
 import LoadingBar from "react-top-loading-bar";
 import Confimation from "./pages/Confirmation";
+import ViewVideo from "./pages/ViewVideo";
 const BrowserRouter = createBrowserRouter([
   {
     path: "/",
@@ -28,7 +29,16 @@ const BrowserRouter = createBrowserRouter([
       },
       {
         path: "/library",
-        element: <Library />,
+        children: [
+          {
+            index: true,
+            element: <Library />,
+          },
+          {
+            path: "/library/:id",
+            element: <ViewVideo />,
+          },
+        ],
       },
     ],
   },
@@ -44,7 +54,7 @@ const BrowserRouter = createBrowserRouter([
 
 function App() {
   const isDarkMode = useSelector((state) => state.ui.isDarkMode);
- 
+
   useEffect(() => {
     document
       .getElementsByTagName("body")[0]

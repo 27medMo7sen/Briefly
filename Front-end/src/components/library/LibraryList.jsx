@@ -12,7 +12,7 @@ function LibraryList() {
     </div>
   ) : (
     <div className="flex justify-center items-center h-[80vh]">
-      <h1 className="text-3xl font-bold bg-[var(--primary)]/20 p-4 rounded-2xl">
+      <h1 className="text-3xl text-[var(--primary-font-color)] font-bold bg-[var(--primary)]/20 p-4 rounded-2xl">
         summarize you first video.
       </h1>
     </div>

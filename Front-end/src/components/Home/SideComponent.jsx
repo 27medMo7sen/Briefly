@@ -4,7 +4,7 @@ import summarizeLecture from "../../../assets/summarizeLectures.png";
 import summarizeMeeting from "../../../assets/summarizeMeetings.png";
 function SideComponent() {
   return (
-    <div className="relative w-full h-[80vh] mt-20 rounded-2xl animate-floating  p-5 ">
+    <div className="relative w-full h-[40vh] mt-20 rounded-2xl animate-floating  p-5 ">
       <img
         src={saveTime}
         alt="saveTime"
@@ -13,7 +13,7 @@ function SideComponent() {
       <img
         src={summarizeLecture}
         alt="summarizeLecture"
-        className="w-[400px] rounded-2xl absolute top-30 left-110 z-20 animate-slide-left"
+        className="w-[400px] rounded-2xl absolute top-30 left-90 z-20 animate-slide-left"
       />
       <img
         src={summarizeMeeting}

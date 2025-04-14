@@ -3,7 +3,9 @@ import { userModel } from "./user.model.js";
 import { generateToken, verifyToken } from "../../utils/tokenFunctions.js";
 import { emailTemplate } from "../../utils/emailTemplate.js";
 import { sendEmailService } from "../../services/sendEmailService.js";
-
+import fs from "fs";
+import path from "path";
+import { dirname } from "path";
 //MARK: signup
 export const signup = async (req, res) => {
   const { email, username, password, confirmPassword, role } = req.body;
@@ -43,6 +45,7 @@ export const signup = async (req, res) => {
       buttonText: "Confirm",
     }),
   });
+  console.log(isEmailsent);
   if (!isEmailsent)
     return next(new Error({ message: "Email not sent", cause: 500 }));
   return res.status(201).json({ message: "User created successfully" });
@@ -73,6 +76,34 @@ export const confirmEmail = async (req, res, next) => {
   });
   user.token = userToken;
   user.isConfirmed = true;
+  const __dirname = decodeURIComponent(
+    dirname(new URL(import.meta.url).pathname).replace(/^\/([a-zA-Z]:)/, "$1")
+  );
+  console.log(__dirname);
+  let storagePath = path.join(
+    __dirname,
+    "..",
+    "..",
+    "..",
+    "storage",
+    user.id.toString()
+  );
+  console.log(storagePath);
+  try {
+    await fs.promises.mkdir(path.join(storagePath, "original"), {
+      recursive: true,
+    });
+    await fs.promises.mkdir(path.join(storagePath, "summarized"), {
+      recursive: true,
+    });
+    await fs.promises.mkdir(path.join(storagePath, "personal_info"), {
+      recursive: true,
+    });
+    console.log("Folder created successfully:", user.id);
+  } catch (err) {
+    console.error("Failed to create folder:", err);
+  }
+
   await user.save();
   return res.status(200).json({ message: "Email confirmed", user });
 };

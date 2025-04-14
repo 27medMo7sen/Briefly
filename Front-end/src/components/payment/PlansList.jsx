@@ -19,110 +19,110 @@ function PlansList() {
     </svg>
   );
 
+  // Plan data structure
+  const plans = [
+    {
+      name: "Free Plan",
+      price: null,
+      bgColor: "bg-[var(--primary)]/30",
+      textColor: "text-[var(--primary-font-color)]",
+      buttonColor: "bg-[var(--primary)]",
+      hoverColor: "hover:bg-[var(--primary)]/80",
+      features: [
+        "Summarize 1 video per month",
+        "Basic text summary format",
+        "Video length limit: 10 minutes",
+        "Standard processing time",
+      ],
+      additionalClasses: "mt-[150px]",
+    },
+    {
+      name: "Pro plan",
+      price: "$15/month",
+      bgColor: "bg-[#170B26]",
+      textColor: "text-white/80",
+      buttonColor: "bg-[#9747FF]",
+      hoverColor: "hover:bg-[#9747FF]/80",
+      features: [
+        "Summarize up to 20 videos per month",
+        "Customizable summary format",
+        "Video length limit: 1 hour",
+        "Priority processing",
+        "Downloadable summaries",
+      ],
+      additionalClasses: "",
+    },
+    {
+      name: "Premium Plan",
+      price: "$30/month",
+      bgColor: "bg-[var(--primary)]/30",
+      textColor: "text-[var(--primary-font-color)]",
+      buttonColor: "bg-[var(--primary)]",
+      hoverColor: "hover:bg-[var(--primary)]/80",
+      features: [
+        "Unlimited video summaries",
+        "Advanced summary format",
+        "No video length limit",
+        "Fast-track processing",
+        "Personalized summary styles",
+        "Priority support",
+      ],
+      additionalClasses: "mt-[110px]",
+    },
+  ];
+
   return (
-    <div className="h-[70vh] flex justify-evenly items-center">
-      <div className="flex flex-col  items-center gap-5 bg-[var(--primary)]/30 px-5 py-5 rounded-xl justify-between h-[50vh] animate-slide-up mt-[150px] text-[var(--primary-font-color)] hover:-translate-y-2 transition ease-in-out delay-150">
-        <div className="flex flex-col gap-10 w-[300px]">
-          <h1 className="text-center text-2xl font-bold  border-b-2 border-[var(--primary-dark)]/40 w-full">
-            Free Plan
-          </h1>
-          <ul className="flex flex-col gap-3 font-semibold text-lg ">
-            <div className="flex gap-2  items-center">
-              <span className="w-10px">{icon}</span>
-              <li>Summarize 1 video per month</li>
+    <div className={`h-[70vh] flex justify-evenly items-center`}>
+      {plans.map((plan, index) => (
+        <div
+          key={index}
+          className={`flex flex-col items-center gap-5 ${
+            plan.bgColor
+          } px-6 py-6 rounded-xl ${plan.textColor} ${
+            plan.additionalClasses
+          } animate-slide-up hover:-translate-y-2 transition ease-in-out delay-150 ${
+            index !== 0 ? "h-[60vh]" : "h-[50vh] justify-between"
+          }`}
+        >
+          <div
+            className={`flex flex-col gap-5 w-[300px] ${
+              index === 1 ? "flex-grow" : ""
+            }`}
+          >
+            <div className="flex flex-col gap-3 justify-center items-center">
+              <h1 className="text-center text-2xl font-bold border-b-2 border-[var(--primary-dark)]/40 w-full">
+                {plan.name}
+              </h1>
+              {plan.price && (
+                <p className="text-center text-xl font-bold">{plan.price}</p>
+              )}
             </div>
-            <div className="flex gap-2  items-center">
-              <span className="w-10px">{icon}</span>
-              <li>Basic text summary format</li>
-            </div>
-            <div className="flex gap-2  items-center">
-              <span className="w-10px">{icon}</span>
-              <li>Video length limit: 10 minutes</li>
-            </div>
-            <div className="flex gap-2  items-center">
-              <span className="w-10px">{icon}</span>
-              <li>Standard processing time </li>
-            </div>
-          </ul>
-        </div>
-        <button className="text-2xl bg-[var(--primary)] text-white px-5 py-2 rounded-lg hover:bg-[var(--primary)]/80 transition ease-in-out delay-150 cursor-pointer">
-          Subscribe now
-        </button>
-      </div>
-      <div className="flex flex-col  items-center gap-5 bg-[#170B26] px-5 py-5 rounded-xl text-white/80 justify-between h-[50vh] animate-slide-up hover:-translate-y-2 transition ease-in-out delay-150 ">
-        <div className="flex flex-col gap-5 w-[300px] ">
-          <div className="flex flex-col gap-3 justify-center items-center">
-            <h1 className="text-center text-2xl font-bold  border-b-2 border-[var(--primary-dark)]/40 w-full">
-              Pro plan
-            </h1>
-            <p className="tex-center tex-xl font-bold">$15/month</p>
+            <ul className="flex flex-col gap-3 font-semibold text-lg">
+              {plan.features.map((feature, featureIndex) => (
+                <div key={featureIndex} className="flex gap-2 items-center">
+                  <span className="w-10px">{icon}</span>
+                  <li>{feature}</li>
+                </div>
+              ))}
+            </ul>
           </div>
-          <ul className="flex flex-col gap-3 font-semibold text-lg ">
-            <div className="flex gap-2  items-center">
-              <span className="w-10px">{icon}</span>
-              <li>Summarize up to 20 videos per month</li>
+          {index === 1 ? (
+            <div className="w-full px-4 mt-4">
+              <button
+                className={`w-full text-xl font-bold ${plan.buttonColor} text-white py-3 rounded-lg ${plan.hoverColor} transition ease-in-out delay-150 cursor-pointer shadow-lg`}
+              >
+                Subscribe now
+              </button>
             </div>
-            <div className="flex gap-2  items-center">
-              <span className="w-10px">{icon}</span>
-              <li>Customizable summary format (bullet points, highlights)</li>
-            </div>
-            <div className="flex gap-2  items-center">
-              <span className="w-10px">{icon}</span>
-              <li>Video length limit: 1 hour</li>
-            </div>
-            <div className="flex gap-2  items-center">
-              <span className="w-10px">{icon}</span>
-              <li>Priority processing </li>
-            </div>
-            <div className="flex gap-2  items-center">
-              <span className="w-10px">{icon}</span>
-              <li>Downloadable summaries (PDF, TXT)</li>
-            </div>
-          </ul>
+          ) : (
+            <button
+              className={`text-2xl ${plan.buttonColor} text-white px-5 py-2 rounded-lg ${plan.hoverColor} transition ease-in-out delay-150 cursor-pointer`}
+            >
+              Subscribe now
+            </button>
+          )}
         </div>
-        <button className="text-2xl bg-[#9747FF] text-white px-5 py-2 rounded-lg hover:bg-[#9747FF]/80 transition ease-in-out delay-150 cursor-pointer">
-          Subscribe now
-        </button>
-      </div>
-      <div className="flex flex-col  items-center gap-5 bg-[var(--primary)]/30 px-5 py-5 rounded-xl justify-between h-[50vh] animate-slide-up mt-[110px] text-[var(--primary-font-color)] hover:-translate-y-2 transition ease-in-out delay-150">
-        <div className="flex flex-col gap-5 w-[300px]">
-          <div className="flex flex-col gap-3 justify-center items-center">
-            <h1 className="text-center text-2xl font-bold  border-b-2 border-[var(--primary-dark)]/40 w-full">
-              Premium Plan
-            </h1>
-            <p className="tex-center tex-xl font-bold">$30/month</p>
-          </div>
-          <ul className="flex flex-col gap-3 font-semibold text-lg ">
-            <div className="flex gap-2  items-center">
-              <span className="w-10px">{icon}</span>
-              <li>Unlimited video summaries</li>
-            </div>
-            <div className="flex gap-2  items-center">
-              <span className="w-10px">{icon}</span>
-              <li>Advanced summary format (text, visuals, key takeaways)</li>
-            </div>
-            <div className="flex gap-2  items-center">
-              <span className="w-10px">{icon}</span>
-              <li>No video length limit</li>
-            </div>
-            <div className="flex gap-2  items-center">
-              <span className="w-10px">{icon}</span>
-              <li>Fast-track processing</li>
-            </div>
-            <div className="flex gap-2  items-center">
-              <span className="w-10px">{icon}</span>
-              <li>Personalized summary styles</li>
-            </div>
-            <div className="flex gap-2  items-center">
-              <span className="w-10px">{icon}</span>
-              <li>Priority support</li>
-            </div>
-          </ul>
-        </div>
-        <button className="text-2xl bg-[var(--primary)] text-white px-5 py-2 rounded-lg hover:bg-[var(--primary)]/80 transition ease-in-out delay-150 cursor-pointer">
-          Subscribe now
-        </button>
-      </div>
+      ))}
     </div>
   );
 }

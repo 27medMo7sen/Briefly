@@ -8,24 +8,22 @@ import { useSelector, useDispatch } from "react-redux";
 import { uiActions } from "../../store/uiSlice";
 import SummarizingCard from "../components/Home/SummarizingCard";
 import SideComponent from "../components/Home/SideComponent";
+import { UploadModal } from "../components/Home/UploadModal";
 function Home() {
-  const isSummaryModalOpen = useSelector(
-    (state) => state.ui.isSummaryModalOpen
+  React.useState(false);
+  const isUploadingOptionsOpened = useSelector(
+    (state) => state.ui.isUploadingOptionsOpened
   );
+
   const dispatch = useDispatch();
-  const onCloseSummaryModal = () => {
-    dispatch(uiActions.toggleIsSummaryModalOpen());
+  const onCloseUploadingModal = () => {
+    dispatch(uiActions.toggleIsUploadingOptionsOpened());
   };
-  useEffect(() => {
-    if (isSummaryModalOpen) {
-      dispatch(uiActions.toggleIsSummaryModalOpen());
-    }
-  }, []);
   return (
     <Fragment>
-      {isSummaryModalOpen && (
-        <Modal onClose={onCloseSummaryModal}>
-          <SummarizingCard />
+      {isUploadingOptionsOpened && (
+        <Modal onClose={onCloseUploadingModal}>
+          <UploadModal />
         </Modal>
       )}
       {/* <VideoPlayer options={videoJsOptions} /> */}

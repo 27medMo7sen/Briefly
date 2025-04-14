@@ -11,7 +11,11 @@ function MiniForm() {
         Market insights that help you start and grow your business.
       </p>
       <form className="flex bg-[var(--primary-font-color)] text-[var(--base)] items-center justify-between p-2 gap-3 rounded-xl w-[300px]">
-        <input type="email" placeholder="Enter your email" />
+        <input
+          type="email"
+          placeholder="Enter your email"
+          className=" placeholder:text-[var(--secondary-font-color)] w-full text-[var(--secondary-font-color)]/80 focus:outline-none "
+        />
         <button
           type="submit"
           className=" text-white rounded-xl p-2 bg-gray-500"

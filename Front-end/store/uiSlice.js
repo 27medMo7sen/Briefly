@@ -6,6 +6,8 @@ export const uiSlice = createSlice({
     isAuth: false,
     isDarkMode: localStorage.getItem("dark") === "true",
     isSummaryModalOpen: false,
+    isUploadingOptionsOpened: false,
+    isUploading: false,
     isShowingSummary: false,
     topLoaderProgress: 0,
   },
@@ -24,7 +26,13 @@ export const uiSlice = createSlice({
       state.isSummaryModalOpen = !state.isSummaryModalOpen;
     },
     toggleIsShowingSummary(state) {
-      state.isShowingSummary = !state.isShowingSummary
+      state.isShowingSummary = !state.isShowingSummary;
+    },
+    toggleIsUploadingOptionsOpened(state) {
+      state.isUploadingOptionsOpened = !state.isUploadingOptionsOpened;
+    },
+    toggleIsUploading(state) {
+      state.isUploading = !state.isUploading;
     },
   },
 });
