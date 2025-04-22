@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useHttp } from "../../../hooks/useHttp";
+import { useHttp } from "../../hooks/useHttp";
 import { Link, useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { authActions } from "../../../store/authSlice";

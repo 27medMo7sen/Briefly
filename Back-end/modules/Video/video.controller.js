@@ -5,7 +5,7 @@ export const uploadVideo = async (req, res, next) => {
     if (!req.file) {
       return next(new Error("No video file uploaded", { cause: 400 }));
     }
-
+    console.log("here22");
     console.log("Uploading video");
     const video = new Video({
       title: req.body.title || req.file.originalname,

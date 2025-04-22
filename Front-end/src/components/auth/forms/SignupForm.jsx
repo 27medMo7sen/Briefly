@@ -1,5 +1,5 @@
 import React from "react";
-import { useInput } from "../../../../hooks/useInput";
+import { useInput } from "../../../hooks/useInput";
 import { CiUser } from "react-icons/ci";
 import { MdAlternateEmail } from "react-icons/md";
 import { PiSuitcaseSimple } from "react-icons/pi";
@@ -9,7 +9,7 @@ import { TbEyeOff } from "react-icons/tb";
 import { TbEye } from "react-icons/tb";
 import GoogleLogo from "../../../../assets/GoogleLogo.png";
 import { Link, redirect } from "react-router-dom";
-import { useHttp } from "../../../../hooks/useHttp";
+import { useHttp } from "../../../hooks/useHttp";
 import { useNavigate } from "react-router-dom";
 
 function SignupForm() {

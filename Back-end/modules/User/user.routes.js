@@ -5,6 +5,7 @@ const router = Router();
 
 router.post("/signup", asyncHandler(uc.signup));
 router.get("/confirm/:token", asyncHandler(uc.confirmEmail));
+router.patch("/refresh-token", asyncHandler(uc.refreshToken));
 router.post("/login", asyncHandler(uc.login));
 
 export default router;

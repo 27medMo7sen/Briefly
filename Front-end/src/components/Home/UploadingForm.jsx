@@ -2,17 +2,16 @@ import React, { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { useDispatch } from "react-redux";
 import { uiActions } from "../../../store/uiSlice";
+import { useUploadsContext } from "../../context/UploadsContext";
 const UploadingForm = () => {
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-  const [selectedFile, setSelectedFile] = useState(null);
   const dispatch = useDispatch();
+  const { toggleUploading, addUpload } = useUploadsContext();
   const onDrop = useCallback((acceptedFiles) => {
     const file = acceptedFiles[0];
     if (file) {
-      setSelectedFile(file); // Save file info
-      handleUpload(file);
+      toggleUploading();
+      addUpload(file);
+      dispatch(uiActions.toggleIsUploadingOptionsOpened());
     }
   }, []);
 
@@ -21,35 +20,6 @@ const UploadingForm = () => {
     accept: "video/*",
     multiple: false,
   });
-
-  const handleUpload = async (file) => {
-    const formData = new FormData();
-    formData.append("video", file);
-    dispatch(uiActions.toggleIsSummaryModalOpen());
-    // try {
-    //   const response = await axios.post(
-    //     "http://localhost:5000/upload",
-    //     formData,
-    //     {
-    //       headers: {
-    //         "Content-Type": "multipart/form-data",
-    //       },
-    //       onUploadProgress: (progressEvent) => {
-    //         const percentCompleted = Math.round(
-    //           (progressEvent.loaded * 100) / progressEvent.total
-    //         );
-    //         setUploadProgress(percentCompleted);
-    //       },
-    //     }
-    //   );
-
-    //   setSuccess(`File uploaded successfully! Path: ${response.data.path}`);
-    //   setUploadProgress(0);
-    // } catch (err) {
-    //   setError(err.response?.data?.message || "Upload failed");
-    //   setUploadProgress(0);
-    // }
-  };
 
   return (
     <div
@@ -80,8 +50,6 @@ const UploadingForm = () => {
         </svg>
         {isDragActive ? (
           <p className="text-blue-500 font-semibold">Drop the video here...</p>
-        ) : selectedFile ? (
-          <p className="text-gray-600 font-medium">{selectedFile.name}</p>
         ) : (
           <>
             <p className="text-gray-600 font-medium">

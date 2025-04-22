@@ -10,6 +10,10 @@ export const uiSlice = createSlice({
     isUploading: false,
     isShowingSummary: false,
     topLoaderProgress: 0,
+    currentVideoId: 0,
+    uploadingVideos: [],
+    uploading: false,
+    isCurrentUploadsOpened: false,
   },
   reducers: {
     setAuth(state, action) {
@@ -33,6 +37,24 @@ export const uiSlice = createSlice({
     },
     toggleIsUploading(state) {
       state.isUploading = !state.isUploading;
+    },
+    pushNewVideo(state, action) {
+      state.uploadingVideos.push({
+        id: state.currentVideoId,
+        file: action.payload,
+      });
+      state.currentVideoId += 1;
+    },
+    removeVideo(state, action) {
+      state.uploadingVideos = state.uploadingVideos.filter(
+        (video) => video.id !== action.payload
+      );
+    },
+    toggleUploading(state) {
+      state.uploading = !state.uploading;
+    },
+    toggleCurrentUploadsOpened(state) {
+      state.isCurrentUploadsOpened = !state.isCurrentUploadsOpened;
     },
   },
 });

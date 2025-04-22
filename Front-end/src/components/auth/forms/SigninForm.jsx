@@ -1,11 +1,11 @@
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import { MdAlternateEmail } from "react-icons/md";
 import { LuLockKeyhole } from "react-icons/lu";
 import { TbEyeOff } from "react-icons/tb";
 import { TbEye } from "react-icons/tb";
-import { useInput } from "../../../../hooks/useInput";
+import { useInput } from "../../../hooks/useInput";
 import { Link } from "react-router-dom";
-import { useHttp } from "../../../../hooks/useHttp";
+import { useHttp } from "../../../hooks/useHttp";
 import { useDispatch } from "react-redux";
 import { authActions } from "../../../../store/authSlice";
 import { useNavigate } from "react-router-dom";
@@ -38,12 +38,13 @@ function SigninForm() {
     if (!emailIsValid || !passwordIsValid) return;
     const signinUser = async () => {
       setIsLoading(true);
-      const res = await sendRequest("user/login", "POST", {
+      const res = await sendRequest("users/login", "POST", {
         email,
         password,
       });
       console.log(res);
       setIsLoading(false);
+      console.log(res.data.user);
       localStorage.setItem("email", res.data.user.email);
       localStorage.setItem("username", res.data.user.username);
       localStorage.setItem("role", res.data.user.role);
@@ -52,7 +53,6 @@ function SigninForm() {
       dispatch(authActions.setToken(res.data.user.token));
       dispatch(authActions.setUsername(res.data.user.username));
       dispatch(authActions.setRole(res.data.user.role));
-
     };
     signinUser();
     resetEmail();
@@ -60,7 +60,10 @@ function SigninForm() {
     navigate("/");
   };
   return (
-    <form className="flex w-[300px] gap-3.5 flex-col animate-slide-right text-[var(--primary-font-color)] " onSubmit={signinHandler}>
+    <form
+      className="flex w-[300px] gap-3.5 flex-col animate-slide-right text-[var(--primary-font-color)] "
+      onSubmit={signinHandler}
+    >
       <h1 className="text-3xl font-semibold  text-[var(--primary-font-color)]">
         Sign in
       </h1>

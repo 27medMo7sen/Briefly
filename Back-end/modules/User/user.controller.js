@@ -138,6 +138,7 @@ export const refreshToken = async (req, res, next) => {
     return next(new Error({ message: "Token not found", cause: 400 }));
   }
   const user = await userModel.findOne({ token });
+  console.log("update", user);
   if (!user) {
     return next(new Error({ message: "Invalid token", cause: 400 }));
   }
