@@ -27,11 +27,11 @@ const videoSchema = new mongoose.Schema(
     },
     summarizedSecureUrl: {
       type: String,
-      required: true,
+      default: null,
     },
     summarizedPublicId: {
       type: String,
-      required: true,
+      default: null,
     },
     secureUrl: {
       type: String,
