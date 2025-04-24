@@ -4,44 +4,36 @@ import Options from "../components/library/Options";
 import { useNavigate } from "react-router-dom";
 import { Modal } from "../UI/Modal";
 import VideoPlayer from "../components/VideoPlayer";
-import video from "../../testVid.mp4";
 import { useDispatch, useSelector } from "react-redux";
 import { uiActions } from "../../store/uiSlice";
 import { FaShare } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
 import { MdDownload } from "react-icons/md";
+
 import SustainableDevelopmentSummary from "../components/library/TextSummary";
+import { useHttp } from "../hooks/useHttp";
 function Library() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { isLoading, error, setIsLoading, sendRequest } = useHttp();
   React.useEffect(() => {
     if (!localStorage.getItem("token")) {
       console.log("Redirecting to login");
       navigate("/auth?mode=signin");
     }
   }, [navigate]);
-  const videoJsOptions = {
-    autoplay: true,
-    controls: true,
-    sources: [
-      {
-        src: video,
-        type: "video/mp4",
-      },
-    ],
-  };
+
   const closeModal = () => {
     console.log("Closing modal");
     dispatch(uiActions.toggleIsShowingSummary());
   };
   const selectedItem = useSelector((state) => state.library.selectedItem);
-  console.log(selectedItem);
   const isShowingSummary = useSelector((state) => state.ui.isShowingSummary);
   return (
     <div className="grid grid-cols-4 py-20">
       {isShowingSummary && (
         <Modal onClose={closeModal}>
-          <VideoPlayer options={videoJsOptions} />
+          <VideoPlayer />
           <div className="flex  gap-4 justify-between border-b-2 pb-4">
             <div className="text-3xl w-[400px] inline font-bold">
               The 2030 Agenda for Sustainable Development
@@ -61,7 +53,7 @@ function Library() {
               </button>
             </div>
           </div>
-            <SustainableDevelopmentSummary />
+          <SustainableDevelopmentSummary />
         </Modal>
       )}
       <div className="col-span-3">

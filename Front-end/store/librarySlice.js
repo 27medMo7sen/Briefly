@@ -17,6 +17,9 @@ export const librarySlice = createSlice({
     removeItem(state, action) {
       state.items = state.items.filter((item) => item.id !== action.payload);
     },
+    setItems(state, action) {
+      state.items = action.payload;
+    },
   },
 });
 

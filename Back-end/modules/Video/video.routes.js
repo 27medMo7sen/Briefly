@@ -1,14 +1,16 @@
 import { Router } from "express";
 import multer from "multer";
 import { isAuth } from "../../middleware/isAuth.js";
-import { uploadVideo, getVideoStatus } from "./video.controller.js";
+import { uploadVideo, getVideoStatus, getVideos } from "./video.controller.js";
 import { customAlphabet } from "nanoid";
+import { asyncHandler } from "../../utils/errorHandling.js";
 const router = Router();
 const nanoid = customAlphabet("1234567890abcdef", 10);
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, `../storage/${req.user._id}/original`);
   },
+
   filename: (req, file, cb) => {
     const fileName = nanoid() + "." + file.originalname.split(".").pop();
     cb(null, fileName);
@@ -31,5 +33,5 @@ const upload = multer({
 
 router.post("/upload", isAuth, upload.single("video"), uploadVideo);
 router.get("/status/:id", isAuth, getVideoStatus);
-
+router.get("/retrieve", isAuth, asyncHandler(getVideos));
 export default router;

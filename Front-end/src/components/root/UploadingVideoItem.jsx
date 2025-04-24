@@ -6,7 +6,8 @@ import { useUploadsContext } from "../../context/UploadsContext";
 
 export const UploadingVideoItem = ({ video }) => {
   const { sendRequest, isLoading, error, setIsLoading } = useHttp();
-  const { toggleUploading, reduceCurrentUploads } = useUploadsContext();
+  const { toggleUploading, reduceCurrentUploads, numberOfcurrenUploads } =
+    useUploadsContext();
   const [progress, setProgress] = useState(0);
   const dispatch = useDispatch();
 
@@ -49,7 +50,7 @@ export const UploadingVideoItem = ({ video }) => {
   }, [uploadSpeed, remainingSize]);
   useEffect(() => {
     if (progress === 100) {
-      setRemainingTime("Upload complete");
+      setRemainingTime("Uploaded");
     }
   }, [progress]);
   // Handle upload completion
@@ -58,7 +59,6 @@ export const UploadingVideoItem = ({ video }) => {
     const uploadVideo = async () => {
       const formData = new FormData();
       formData.append("video", video.file);
-
       const response = await sendRequest(
         "videos/upload/",
         "POST",
@@ -68,17 +68,16 @@ export const UploadingVideoItem = ({ video }) => {
         },
         onUploadProgress
       );
-
       if (response.status === 201) {
-        dispatch(uiActions.removeUploadingVideo(video.id));
+        const data = response.data;
+        console.log("Upload successful:", data);
+        toggleUploading(video.id);
+        reduceCurrentUploads((prev) => prev - 1);
       } else {
         console.error("Error uploading video:", response.statusText);
       }
     };
-
     uploadVideo();
-    toggleUploading(video.id);
-    reduceCurrentUploads((prev) => prev - 1);
   }, []);
 
   return (

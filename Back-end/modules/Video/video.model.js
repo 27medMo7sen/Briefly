@@ -25,6 +25,22 @@ const videoSchema = new mongoose.Schema(
       unique: true,
       required: true,
     },
+    summarizedSecureUrl: {
+      type: String,
+      required: true,
+    },
+    summarizedPublicId: {
+      type: String,
+      required: true,
+    },
+    secureUrl: {
+      type: String,
+      required: true,
+    },
+    publicId: {
+      type: String,
+      required: true,
+    },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

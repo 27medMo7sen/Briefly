@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import brieflyLogo from "../../../assets/brieflyLogo.png";
 import brieflyLogoDark from "../../../assets/brieflyLogoDark.png";
 import { Link, NavLink } from "react-router-dom";
@@ -6,6 +6,9 @@ import { IoNotificationsOutline } from "react-icons/io5";
 import { useSelector, useDispatch } from "react-redux";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 import { uiActions } from "../../../store/uiSlice";
+import { IoMdCloudUpload } from "react-icons/io";
+import { UploadingVideoList } from "./UploadingVideoList";
+import { useUploadsContext } from "../../context/UploadsContext";
 
 function MainNavigation() {
   const activeClasses =
@@ -16,6 +19,25 @@ function MainNavigation() {
   const token = useSelector((state) => state.auth.token);
   const username = useSelector((state) => state.auth.username);
   const isDarkMode = useSelector((state) => state.ui.isDarkMode);
+  const { uploads, numberOfCurrentUploads } = useUploadsContext();
+
+  // State for in-progress uploads count
+  const [inProgressUploads, setInProgressUploads] = useState(0);
+
+  // Update the in-progress count whenever uploads changes
+  useEffect(() => {
+    const inProgressCount = uploads.reduce((acc, upload) => {
+      if (upload.uploading === true) {
+        return acc + 1;
+      }
+      return acc;
+    }, 0);
+
+    console.log("Uploads updated:", uploads);
+    console.log("Calculated in-progress uploads:", inProgressCount);
+
+    setInProgressUploads(inProgressCount);
+  }, [uploads]); // Only depend on uploads array
 
   const toggleDarkMode = () => {
     dispatch(uiActions.toggleDarkMode());
@@ -32,7 +54,7 @@ function MainNavigation() {
       {/* Enhanced Nav Links Container */}
       <div className="relative">
         {/* Simple blurred background with border */}
-        <div className="flex gap-5 text-2xl bg-[var(--primary-font-color)]/2 backdrop-blur-md     rounded-3xl px-6 py-3">
+        <div className="flex gap-5 text-2xl bg-[var(--primary-font-color)]/2 backdrop-blur-md rounded-3xl px-6 py-3">
           <NavLink
             to="/"
             className={({ isActive }) =>
@@ -61,11 +83,34 @@ function MainNavigation() {
       </div>
 
       <div className="flex justify-center items-center gap-5">
+        <div className="relative">
+          <button
+            onClick={() => {
+              dispatch(uiActions.toggleCurrentUploadsOpened());
+            }}
+            className="flex flex-col cursor-pointer text-2xl text-[var(--primary-font-color)] relative"
+            aria-label={`${inProgressUploads} videos uploading`}
+          >
+            <IoMdCloudUpload />
+            {/* Debug inProgressUploads value */}
+            {console.log(
+              "Rendering with inProgressUploads:",
+              numberOfCurrentUploads
+            )}
+            {/* Improved badge styling to ensure visibility */}
+            {numberOfCurrentUploads > 0 && (
+              <span className="absolute -top-2 -right-2 bg-[var(--primary)] text-white rounded-full w-5 h-5 flex justify-center items-center text-xs font-bold z-10">
+                {numberOfCurrentUploads}
+              </span>
+            )}
+          </button>
+          <UploadingVideoList />
+        </div>
         <DarkModeSwitch
           style={{ fontSize: 30 }}
           checked={isDarkMode}
           onChange={toggleDarkMode}
-          size={30}
+          size={20}
         />
         <button className="text-2xl text-[var(--primary-font-color)]">
           <IoNotificationsOutline />

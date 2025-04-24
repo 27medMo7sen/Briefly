@@ -14,11 +14,10 @@ const getToken = () => {
 };
 
 export const useHttp = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState("");
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const sendRequest = useCallback(
     async (
       url,
@@ -27,21 +26,19 @@ export const useHttp = () => {
       contentType = null,
       onUploadProgress = null
     ) => {
-      if (isLoading)
-        return { data: null, error: "Request already in progress" };
-
-      setIsLoading(true);
       setError(null);
-      console.log("Sending request to:", url);
+
+      // Ensure URL is a string
+      console.log("URL:", url);
+      const requestUrl = typeof url === "string" ? url : url.toString();
 
       const token = getToken();
 
       try {
-        console.log("Fetching data...");
         dispatch(uiActions.setTopLoaderProgress(50));
-
+        console.log(isLoading);
         const response = await axios({
-          url,
+          url: requestUrl,
           method,
           data,
           headers: {
@@ -51,27 +48,25 @@ export const useHttp = () => {
           onUploadProgress,
         });
 
-        setIsLoading(false);
-        console.log(response);
+        setIsLoading("");
         dispatch(uiActions.setTopLoaderProgress(100));
         return response;
       } catch (error) {
         dispatch(uiActions.setTopLoaderProgress(100));
-        console.log(error.response.status);
+
         // Handle token refresh if needed
-        if (error.response.status === 432) {
+        if (error.response && error.response.status === 432) {
           try {
             dispatch(uiActions.setTopLoaderProgress(50));
             const res = await axios.patch("users/refresh-token", {
               token: token,
             });
 
-            console.log(res.data);
             localStorage.setItem("token", res.data.token);
 
             // Resend the request with new token
             const response = await axios({
-              url,
+              url: requestUrl,
               method,
               data,
               headers: {
@@ -81,32 +76,23 @@ export const useHttp = () => {
               onUploadProgress,
             });
 
-            setIsLoading(false);
-            console.log("Fetched data:", response.data);
+            setIsLoading("");
             dispatch(uiActions.setTopLoaderProgress(100));
-            return response;
+            return { data: response.data, response };
           } catch (refreshError) {
-            setIsLoading(false);
+            setIsLoading("");
             setError(refreshError);
             navigate("/auth?mode=signin");
             return { data: null, error: refreshError };
           }
         } else {
-          setIsLoading(false);
-          console.log("Error:", error.message);
-          if (error.response) {
-            console.log(
-              "Error response:",
-              error.response.data,
-              error.response.status
-            );
-          }
+          setIsLoading("");
           setError(error);
-          return { data: null, error };
+          return { data: null, error, status: error.response?.status };
         }
       }
     },
-    [isLoading, dispatch, navigate]
+    [dispatch, navigate]
   );
 
   return { isLoading, error, setIsLoading, sendRequest };
