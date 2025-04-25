@@ -9,7 +9,7 @@ export const uploadVideo = async (req, res, next) => {
       return next(new Error("No video file uploaded", { cause: 400 }));
     }
 
-    console.log("Starting video upload process");
+    console.log("🚀 Starting video upload process...");
     const __dirname = decodeURIComponent(
       path
         .dirname(new URL(import.meta.url).pathname)
@@ -17,6 +17,7 @@ export const uploadVideo = async (req, res, next) => {
     );
 
     // Create user's storage directory if it doesn't exist
+    console.log("📁 Creating storage directories...");
     const userStoragePath = path.join(
       __dirname,
       "..",
@@ -29,24 +30,29 @@ export const uploadVideo = async (req, res, next) => {
     // Create original and summarized directories
     await fs.promises.mkdir(path.join(userStoragePath, "original"), { recursive: true });
     await fs.promises.mkdir(path.join(userStoragePath, "summarized"), { recursive: true });
+    console.log("✅ Storage directories created");
 
     const filePath = path.join(userStoragePath, "original", req.file.filename);
 
     // First, copy the file to the local storage
+    console.log("💾 Copying file to local storage...");
     await fs.promises.copyFile(req.file.path, filePath);
-    console.log("File copied to local storage");
+    console.log("✅ File copied to local storage");
 
     // Then upload to Cloudinary
+    console.log("☁️ Starting Cloudinary upload...");
     const cloudinaryResult = await uploadToCloudinary(
       filePath,
       `videos/${req.user._id}/original`
     );
-    console.log("File uploaded to Cloudinary");
+    console.log("✅ Cloudinary upload completed");
 
     // Clean up the temporary file
+    console.log("🧹 Cleaning up temporary files...");
     await fs.promises.unlink(req.file.path);
-    console.log("Temporary file cleaned up");
+    console.log("✅ Temporary files cleaned up");
 
+    console.log("💾 Saving video metadata to database...");
     const video = new Video({
       title: req.body.title || req.file.originalname,
       description: req.body.description,
@@ -59,7 +65,8 @@ export const uploadVideo = async (req, res, next) => {
     });
 
     await video.save();
-    console.log("Video saved to database");
+    console.log("✅ Video metadata saved to database");
+    console.log("🎉 Video upload process completed successfully!");
 
     return res.status(201).json({
       message: "Video uploaded successfully",
@@ -72,13 +79,14 @@ export const uploadVideo = async (req, res, next) => {
       },
     });
   } catch (error) {
-    console.error("Error in uploadVideo:", error);
+    console.error("❌ Error in uploadVideo:", error);
     // Clean up any temporary files in case of error
     if (req.file && req.file.path) {
       try {
         await fs.promises.unlink(req.file.path);
+        console.log("✅ Temporary files cleaned up after error");
       } catch (cleanupError) {
-        console.error("Error cleaning up temporary file:", cleanupError);
+        console.error("❌ Error cleaning up temporary file:", cleanupError);
       }
     }
     return next(new Error(error.message, { cause: error.cause || 500 }));
